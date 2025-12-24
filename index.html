@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Christmas Door - Responsive Full</title>
+<style>
+/* ---------- BASE ---------- */
+body {
+  margin: 0;
+  height: 100vh;
+  background: radial-gradient(circle at top, #2b3a67, #0b132b);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  font-family: Arial, sans-serif;
+  position: relative;
+  user-select: none;
+}
+
+/* MERRY CHRISTMAS TEXT */
+#merry {
+  position: absolute;
+  top: 2vh;
+  width: 100%;
+  text-align: center;
+  font-size: 3vw; /* scales with screen width */
+  color: gold;
+  text-shadow: 0 0 0.3vw #fff;
+  z-index: 20;
+}
+
+/* CLICK ANYWHERE TEXT */
+#click {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 2.5vw;
+  color: #fff;
+  background: rgba(0,0,0,.5);
+  padding: 1vw 2vw;
+  border-radius: 1vw;
+  cursor: pointer;
+  z-index: 50;
+  animation: blink 1s infinite alternate;
+}
+
+@keyframes blink { 0%{opacity:1} 100%{opacity:.3} }
+
+.scene { perspective: 1500px; z-index: 2; }
+
+/* DOOR FRAME */
+.door-frame {
+  width: 25vw;       /* scales with screen width */
+  height: 40vh;      /* scales with screen height for bigger screens */
+  min-width: 220px;  /* minimum size for mobile */
+  min-height: 320px;
+  padding: 1vw;
+  background: #1a1a1a;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4vw 10vw rgba(0,0,0,.7);
+  border-radius: 0.5vw;
+}
+
+/* INSIDE */
+.inside {
+  position: absolute;
+  inset: 1vw;
+  background: black;
+  opacity: 0;
+  filter: blur(1vw);
+  transition: opacity .8s ease .4s, filter 1.2s ease;
+}
+
+.door-frame.open .inside { opacity: 1; filter: blur(0); }
+
+/* MEDIA */
+.media {
+  position: absolute;
+  inset: 0;
+  display: none;
+}
+.media video, .media img { width: 100%; height: 100%; object-fit: contain; }
+.media.active { display: block; }
+
+/* BUTTONS */
+.buttons {
+  position: absolute;
+  bottom: 2vh;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 1vw;
+  z-index: 15;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+.door-frame.open .buttons { opacity: 1; pointer-events: auto; }
+
+.buttons button {
+  padding: 0.8vw 1.4vw;
+  border-radius: 2vw;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1.5vw;
+  background: linear-gradient(145deg, #ffd700, #ffb700);
+}
+
+/* DOOR */
+.door {
+  width: 20vw;
+  height: 30vh;
+  min-width: 200px;
+  min-height: 300px;
+  background: linear-gradient(160deg, #8b5a2b, #4a2c16);
+  transform-origin: left;
+  transition: transform 1.2s cubic-bezier(.25,.8,.25,1);
+  cursor: pointer;
+  position: relative;
+  z-index: 20;
+  box-shadow: inset -0.6vw 0 1.5vw rgba(0,0,0,.6);
+  border-radius: 0.3vw;
+}
+
+/* DOOR KNOB */
+.door::after {
+  content:"";
+  position:absolute;
+  right:1.6vw;
+  top:50%;
+  transform:translateY(-50%);
+  width:1.4vw;
+  height:1.4vw;
+  background:gold;
+  border-radius:50%;
+  box-shadow: 0 0 0.4vw #fff;
+}
+
+.door.open { transform: rotateY(-115deg); }
+
+/* SNOW */
+.snow {
+  position: fixed;
+  width: 0.6vw;
+  height: 0.6vw;
+  background: white;
+  border-radius: 50%;
+  opacity: .8;
+  animation: fall linear infinite;
+}
+@keyframes fall { to { transform: translateY(110vh); } }
+
+/* Responsive adjustments for small screens */
+@media(max-width:500px) {
+  .door-frame { width: 40vw; height: 60vw; }
+  .door { width: 38vw; height: 58vw; }
+  #merry { font-size: 6vw; }
+  #click { font-size: 5vw; padding: 3vw 5vw; }
+  .buttons button { font-size: 4vw; padding: 3vw 5vw; }
+}
+</style>
+</head>
+<body>
+
+<div id="merry">Merry Christmas!</div>
+<div id="click">click the door</div>
+
+<div class="scene">
+  <div class="door-frame" id="frame">
+    <div class="inside">
+      <!-- VIDEO 1 -->
+      <div class="media" data-type="video">
+        <video loop>
+          <source src="111.mp4" type="video/mp4">
+        </video>
+      </div>
+      <!-- VIDEO 2 -->
+      <div class="media" data-type="video">
+        <video loop>
+          <source src="222.mp4" type="video/mp4">
+        </video>
+      </div>
+      <!-- VIDEO 3 -->
+      <div class="media" data-type="video">
+        <video loop>
+          <source src="333.mp4" type="video/mp4">
+        </video>
+      </div>
+      <!-- VIDEO 4 -->
+      <div class="media" data-type="video">
+        <video loop>
+          <source src="444.mp4" type="video/mp4">
+        </video>
+      </div>
+      <!-- GCASH IMAGE -->
+      <div class="media" id="gcashImage">
+        <img src="55.jpg" alt="GCash QR">
+      </div>
+
+      <!-- BUTTONS -->
+      <div class="buttons">
+        <button onclick="showGCash()">SURPRISE</button>
+        <button onclick="showRandom()">NEXT</button>
+      </div>
+    </div>
+
+    <div class="door" id="door"></div>
+  </div>
+</div>
+
+<script>
+const door = document.getElementById("door");
+const frame = document.getElementById("frame");
+const clickText = document.getElementById("click");
+const backBtn = document.getElementById("backBtn");
+
+const medias = document.querySelectorAll(".media");
+const videoMedias = document.querySelectorAll('.media[data-type="video"]');
+
+function resetMedia() {
+  medias.forEach(m => m.classList.remove("active"));
+  videoMedias.forEach(v => v.querySelector("video").pause());
+}
+
+function getRandomVideo() {
+  return videoMedias[Math.floor(Math.random() * videoMedias.length)];
+}
+
+// CLICK ANYWHERE HANDLER
+document.body.addEventListener('click', () => {
+  if(clickText.style.display !== "none") {
+    clickText.style.display = "none";
+  }
+}, { once: true });
+
+// DOOR CLICK
+door.onclick = (e) => {
+  e.stopPropagation();
+  const open = door.classList.toggle("open");
+  frame.classList.toggle("open", open);
+  if(open) playRandomVideo();
+  else resetMedia();
+};
+
+// ISA-PA BUTTON
+function showRandom() {
+  playRandomVideo();
+  backBtn.style.display = "block";
+}
+
+// GCASH BUTTON
+function showGCash() {
+  resetMedia();
+  document.getElementById("gcashImage").classList.add("active");
+  backBtn.style.display = "block";
+}
+
+// BACK BUTTON
+function goBack() {
+  resetMedia();
+  backBtn.style.display = "none";
+  playRandomVideo();
+}
+
+// PLAY RANDOM VIDEO FUNCTION
+function playRandomVideo() {
+  resetMedia();
+  const rand = getRandomVideo();
+  rand.classList.add("active");
+  rand.querySelector("video").currentTime = 0;
+  rand.querySelector("video").play();
+}
+
+/* SNOW */
+setInterval(() => {
+  const s = document.createElement("div");
+  s.className = "snow";
+  s.style.left = Math.random() * window.innerWidth + "px";
+  s.style.animationDuration = 3 + Math.random() * 5 + "s";
+  document.body.appendChild(s);
+  setTimeout(() => s.remove(), 7000);
+}, 150);
+</script>
+
+</body>
+</html>
